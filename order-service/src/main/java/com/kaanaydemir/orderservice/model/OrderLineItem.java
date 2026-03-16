@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Getter
@@ -22,6 +22,4 @@ public class OrderLineItem {
     private String skuCode;
     private BigDecimal price;
     private Integer quantity;
-
-
 }
