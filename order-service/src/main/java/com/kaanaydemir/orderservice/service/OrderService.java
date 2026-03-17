@@ -1,1 +1,26 @@
-// Error: HTTP 400 - {"error":{"code":"runtime_error","message":"500 - <html>\r\n<head><title>500 Internal Server Error</title></head>\r\n<body>\r\n<center><h1>500 Internal Server Error</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n","param":null,"type":"runtime_error"}}
+package com.kaanaydemir.orderservice.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import jakarta.transaction.Transactional;
+
+@Service
+public class OrderService {
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Transactional
+    public void placeOrder(String order) {
+        // business logic
+        rabbitTemplate.convertAndSend("order-topic", order);
+    }
+
+    @RabbitListener(queuesToDeclare = @Queue(name = "order-topic", durable = "true"))
+    public void listen(String message) {
+        // business logic
+    }
+}

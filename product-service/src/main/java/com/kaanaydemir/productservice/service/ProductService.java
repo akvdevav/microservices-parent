@@ -1,1 +1,32 @@
-// Error: HTTP 400 - {"error":{"code":"runtime_error","message":"500 - <html>\r\n<head><title>500 Internal Server Error</title></head>\r\n<body>\r\n<center><h1>500 Internal Server Error</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n","param":null,"type":"runtime_error"}}
+package com.kaanaydemir.productservice.service;
+
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.kaanaydemir.productservice.model.Product;
+import com.kaanaydemir.productservice.repository.ProductRepository;
+
+@Service
+public class ProductService {
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
+    }
+
+    public void sendProductCreatedEvent(Product product) {
+        rabbitTemplate.convertAndSend("product-events", product.getId().toString());
+    }
+
+    @RabbitListener(queuesToDeclare = @Queue(name = "product-events", durable = "true"))
+    public void listen(String message) {
+        // handle incoming message
+    }
+}

@@ -1,1 +1,26 @@
-// Error: HTTP 400 - {"error":{"code":"runtime_error","message":"500 - <html>\r\n<head><title>500 Internal Server Error</title></head>\r\n<body>\r\n<center><h1>500 Internal Server Error</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n","param":null,"type":"runtime_error"}}
+package com.kaanaydemir.orderservice.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import com.kaanaydemir.orderservice.dto.OrderRequest;
+import com.kaanaydemir.orderservice.service.OrderService;
+import jakarta.validation.Valid;
+import jakarta.transaction.Transactional;
+
+@RestController
+@RequestMapping("/api/v1/orders")
+public class OrderController {
+
+    private final OrderService orderService;
+
+    @Autowired
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @PostMapping
+    @Transactional
+    public void placeOrder(@Valid @RequestBody OrderRequest orderRequest) {
+        orderService.placeOrder(orderRequest);
+    }
+}

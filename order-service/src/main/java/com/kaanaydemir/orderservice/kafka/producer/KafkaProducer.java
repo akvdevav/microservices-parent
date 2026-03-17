@@ -1,1 +1,27 @@
-// Error: HTTP 400 - {"error":{"code":"runtime_error","message":"500 - <html>\r\n<head><title>500 Internal Server Error</title></head>\r\n<body>\r\n<center><h1>500 Internal Server Error</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n","param":null,"type":"runtime_error"}}
+package com.kaanaydemir.orderservice.producer;
+
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class KafkaProducer {
+
+    private final RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    public KafkaProducer(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    public void sendMessage(String queue, String message) {
+        rabbitTemplate.convertAndSend(queue, message);
+    }
+
+    @RabbitListener(queuesToDeclare = @Queue(name = "someTopic", durable = "true"))
+    public void listen(String message) {
+        // process the received message
+    }
+}

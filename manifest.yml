@@ -3,7 +3,7 @@
 # Usage: cf push -f manifest.yml
 ---
 applications:
-  - name: session-1-cfef4bd9
+  - name: session-12-80503531
     memory: 1G
     disk_quota: 2G
     instances: 1
@@ -13,7 +13,6 @@ applications:
       - java_buildpack_offline
     services:
       - doc-ai-rabbitmq
-      - doc-ai-postgres
     env:
       JAVA_HOME: /opt/java
       JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 21.+ } }'
