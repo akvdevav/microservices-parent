@@ -24,19 +24,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      postgres:
-        image: postgres:16
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -56,11 +43,6 @@ jobs:
           SPRING_RABBITMQ_PORT: 5672
           SPRING_RABBITMQ_USERNAME: guest
           SPRING_RABBITMQ_PASSWORD: guest
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
-          SPRING_DATASOURCE_USERNAME: postgres
-          SPRING_DATASOURCE_PASSWORD: postgres
-          SPRING_JPA_HIBERNATE_DDL_AUTO: update
-          SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
 
       - name: Run tests
         run: mvn -B test -DskipTests --no-transfer-progress
@@ -70,11 +52,6 @@ jobs:
           SPRING_RABBITMQ_PORT: 5672
           SPRING_RABBITMQ_USERNAME: guest
           SPRING_RABBITMQ_PASSWORD: guest
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
-          SPRING_DATASOURCE_USERNAME: postgres
-          SPRING_DATASOURCE_PASSWORD: postgres
-          SPRING_JPA_HIBERNATE_DDL_AUTO: update
-          SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
 
       - name: Package
         run: mvn -B package -DskipTests --no-transfer-progress
